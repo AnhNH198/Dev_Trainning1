@@ -1,16 +1,21 @@
 import requests
-from selenium.webdriver import Chrome
+from selenium.webdriver import Firefox
+from bs4 import BeautifulSoup
 
-driver = Chrome(executable_path='C:\\chromedriver.exe')
-target = "http://45.79.43.178/source_carts/wordpress/wp-admin"
-
+driver = Firefox()
+target = "http://45.79.43.178/source_carts/wordpress/wp-admin/"
+log = "http://45.79.43.178/source_carts/wordpress/wp-login.php"
 
 def get_current_username_requests():
     s = requests.Session()
     r = s.get(target, auth=('admin', '123456aA'))
     print(r.status_code)
-    print(r.headers)
-
+    key = {'log': 'admin', 'pwd': '123456aA', 'wp-submit': 'Log in',
+           'redirect_to': target, 'testcookie': '1'}
+    res = requests.post(log, data=key)
+    text = BeautifulSoup(res.text)
+    mydivs = text.findAll
+    print(mydivs)
 
 def get_current_username_selenium():
     # Connect to target
@@ -30,4 +35,4 @@ def get_current_username_selenium():
 
 if __name__ == '__main__':
     get_current_username_requests()
-    # get_current_username_selenium()
+    #get_current_username_selenium()
